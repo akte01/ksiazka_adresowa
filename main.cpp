@@ -4,16 +4,16 @@ using namespace std;
 
 int main()
 {
-    int idZalogowanegoUzytkownika = 0;
+    int loggedUserId = 0;
     while(1)
     {
-        vector <Uzytkownik> uzytkownicy;
-        OpcjeUzytkownikow import;
-        import.importujDaneUzytkownikow(uzytkownicy);
+        vector <User> users;
+        UserOptions import;
+        import.importUserData(users);
 
-        int wybor;
+        int userFirstChoice;
 
-        if (idZalogowanegoUzytkownika == 0)
+        if (loggedUserId == 0)
         {
             system("cls");
             cout<<">>>KSIAZKA ADRESOWA<<<"<<endl;
@@ -26,20 +26,20 @@ int main()
             cout<< endl;
             cout<< "Wybierz opcje: ";
 
-            cin>>wybor;
+            cin>>userFirstChoice;
 
-            switch (wybor)
+            switch (userFirstChoice)
             {
             case 1:
             {
-                OpcjeUzytkownikow rejestracja;
-                rejestracja.zarejestrujUzytkownika(uzytkownicy);
+                UserOptions registration;
+                registration.registerUser(users);
             }
             break;
             case 2:
             {
-                OpcjeUzytkownikow logowanie;
-                idZalogowanegoUzytkownika = logowanie.zalogujUzytkownika(uzytkownicy);
+                UserOptions login;
+                loggedUserId = login.logInUser(users);
             }
             break;
             case 3:
@@ -49,10 +49,10 @@ int main()
         }
         else
         {
-            vector <Osoba> daneAdresowe;
-            int wybranaOpcja;
-            OpcjeKontaktow import;
-            import.importujKontaktyDlaZalogownegoUzytkownika(daneAdresowe, idZalogowanegoUzytkownika);
+            vector <Person> addressData;
+            int userSecondChoice;
+            ContactOptions import;
+            import.importContactsForLoggedUsers(addressData, loggedUserId);
             system("cls");
             cout<<">>>KSIAZKA ADRESOWA<<<"<<endl;
             cout<<"------------------"<<endl;
@@ -67,65 +67,65 @@ int main()
             cout<< "8. Wyloguj sie"<<endl;
             cout<<endl;
             cout<<"Wybierz opcje: ";
-            cin>>wybranaOpcja;
+            cin>>userSecondChoice;
 
-            switch(wybranaOpcja)
+            switch(userSecondChoice)
             {
             case 1:
 
             {
-                OpcjeKontaktow dodawanie;
-                dodawanie.dodajKontakt(daneAdresowe, idZalogowanegoUzytkownika);
+                ContactOptions adding;
+                adding.addContact(addressData, loggedUserId);
             }
 
             break;
 
             case 2:
             {
-                OpcjeKontaktow wyszukiwaniePoImieniu;
-                wyszukiwaniePoImieniu.wyszukajKontaktPoImieniu(daneAdresowe);
+                ContactOptions searchingByName;
+                searchingByName.searchContactByName(addressData);
             }
             break;
 
             case 3:
             {
-                OpcjeKontaktow wyszukiwaniePoNazwisku;
-                wyszukiwaniePoNazwisku.wyszukajKontaktPoNazwisku(daneAdresowe);
+                ContactOptions searchingByLastName;
+                searchingByLastName.searchContactByLastName(addressData);
             }
             break;
 
             case 4:
             {
-                OpcjeKontaktow wyswietlanie;
-                wyswietlanie.wyswietlWszystkieKontakty(daneAdresowe);
+                ContactOptions showing;
+                showing.showAllContacts(addressData);
             }
 
             break;
 
             case 5:
                 {
-                 OpcjeKontaktow edycja;
-                 edycja.edytujKontakt(daneAdresowe, idZalogowanegoUzytkownika);
+                 ContactOptions edition;
+                 edition.editContact(addressData, loggedUserId);
                 }
                 break;
 
             case 6:
                 {
-                   OpcjeKontaktow usuwanie;
-                   usuwanie.usunKontakt(daneAdresowe, idZalogowanegoUzytkownika);
+                   ContactOptions removal;
+                   removal.removeContact(addressData, loggedUserId);
                 }
                 break;
 
             case 7:
             {
-                OpcjeUzytkownikow haslo;
-                haslo.zmianaHasla(uzytkownicy, idZalogowanegoUzytkownika);
+                UserOptions password;
+                password.changePassword(users, loggedUserId);
             }
             break;
 
             case 8:
             {
-                idZalogowanegoUzytkownika = 0;
+                loggedUserId = 0;
                 cout<<"Wylogowales sie!"<<endl;
                 Sleep(1000);
             }

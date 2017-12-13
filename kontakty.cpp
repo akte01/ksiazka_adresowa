@@ -3,217 +3,217 @@
 
 using namespace std;
 
-Uzytkownik::Uzytkownik(string idUzytkownika, string nazwaUzytkownika, string hasloUzytkownika)
+User::User(string userId, string userName, string userPassword)
 {
-    this -> idUzytkownika = idUzytkownika;
-    this -> nazwaUzytkownika = nazwaUzytkownika;
-    this -> hasloUzytkownika = hasloUzytkownika;
+    this -> userId = userId;
+    this -> userName = userName;
+    this -> userPassword = userPassword;
 }
 
-Osoba::Osoba(string numerID, string idUzytkownika, string imie, string nazwisko, string telefon, string mail, string adres)
+Person::Person(string IdNumber, string userId, string name, string lastName, string phoneNumber, string emailAddress, string address)
 {
-    this -> numerID = numerID;
-    this -> idUzytkownika = idUzytkownika;
-    this -> imie = imie;
-    this -> nazwisko = nazwisko;
-    this -> telefon = telefon;
-    this -> mail = mail;
-    this -> adres = adres;
+    this -> IdNumber = IdNumber;
+    this -> userId = userId;
+    this -> name = name;
+    this -> lastName = lastName;
+    this -> phoneNumber = phoneNumber;
+    this -> emailAddress = emailAddress;
+    this -> address = address;
 }
 
-string konwersjaIntNaString(int numerID)
+string intToStringConversion(int IdNumber)
 {
     ostringstream ss;
-    ss << numerID;
+    ss << IdNumber;
     string str = ss.str();
     return str;
 }
 
-void OpcjeKontaktow::pobierzDaneOsoby(vector <string> &pojedynczyKontakt, string daneOsobyOddzieloneKreskami)
+void ContactOptions::getPersonalData(vector <string> &singleContact, string personalDataSeparatedByLine)
 {
-    string pojedynczeDaneKontaktu = "";
-    int numerPojedynczychDanychKontaktu = 1;
+    string singleContactDetails = "";
+    int singleContactDetailsNumber = 1;
 
-    for (int pozycjaZnaku = 0; pozycjaZnaku < daneOsobyOddzieloneKreskami.length(); pozycjaZnaku++)
+    for (int charPosition = 0; charPosition < personalDataSeparatedByLine.length(); charPosition++)
     {
-        if (daneOsobyOddzieloneKreskami[pozycjaZnaku] != '|')
+        if (personalDataSeparatedByLine[charPosition] != '|')
         {
-            pojedynczeDaneKontaktu += daneOsobyOddzieloneKreskami[pozycjaZnaku];
+            singleContactDetails += personalDataSeparatedByLine[charPosition];
         }
         else
         {
-            switch(numerPojedynczychDanychKontaktu)
+            switch(singleContactDetailsNumber)
             {
             case 1:
-                pojedynczyKontakt.push_back(pojedynczeDaneKontaktu);
+                singleContact.push_back(singleContactDetails);
                 break;
             case 2:
-                pojedynczyKontakt.push_back(pojedynczeDaneKontaktu);
+                singleContact.push_back(singleContactDetails);
                 break;
             case 3:
-                pojedynczyKontakt.push_back(pojedynczeDaneKontaktu);
+                singleContact.push_back(singleContactDetails);
                 break;
             case 4:
-                pojedynczyKontakt.push_back(pojedynczeDaneKontaktu);
+                singleContact.push_back(singleContactDetails);
                 break;
             case 5:
-                pojedynczyKontakt.push_back(pojedynczeDaneKontaktu);
+                singleContact.push_back(singleContactDetails);
                 break;
             case 6:
-                pojedynczyKontakt.push_back(pojedynczeDaneKontaktu);
+                singleContact.push_back(singleContactDetails);
                 break;
             case 7:
-                pojedynczyKontakt.push_back(pojedynczeDaneKontaktu);
+                singleContact.push_back(singleContactDetails);
                 break;
             }
-            pojedynczeDaneKontaktu = "";
-            numerPojedynczychDanychKontaktu++;
+            singleContactDetails = "";
+            singleContactDetailsNumber++;
         }
     }
 }
-void OpcjeKontaktow::importujWszystkieKontakty(vector <Osoba> &daneAdresowe)
+void ContactOptions::importAllContacts(vector <Person> &addressData)
 {
-    vector <string> pojedynczyKontakt;
-    string daneOsobyOddzieloneKreskami = "";
-    fstream bazaKontaktow;
-    bazaKontaktow.open("kontakty.txt", ios::in);
+    vector <string> singleContact;
+    string personalDataSeparatedByLine = "";
+    fstream contactDatabase;
+    contactDatabase.open("kontakty.txt", ios::in);
 
-    if (bazaKontaktow.good() == true)
+    if (contactDatabase.good() == true)
     {
-        while (getline(bazaKontaktow, daneOsobyOddzieloneKreskami))
+        while (getline(contactDatabase, personalDataSeparatedByLine))
         {
-            OpcjeKontaktow pobieranie;
-            pobieranie.pobierzDaneOsoby(pojedynczyKontakt, daneOsobyOddzieloneKreskami);
-            daneAdresowe.push_back(Osoba(pojedynczyKontakt[0], pojedynczyKontakt[1],
-                                         pojedynczyKontakt[2], pojedynczyKontakt[3],
-                                         pojedynczyKontakt[4], pojedynczyKontakt[5],
-                                         pojedynczyKontakt[6]));
-            pojedynczyKontakt.clear();
+            ContactOptions collection;
+            collection.getPersonalData(singleContact, personalDataSeparatedByLine);
+            addressData.push_back(Person(singleContact[0], singleContact[1],
+                                         singleContact[2], singleContact[3],
+                                         singleContact[4], singleContact[5],
+                                         singleContact[6]));
+            singleContact.clear();
         }
-        bazaKontaktow.close();
+        contactDatabase.close();
     }
 }
 
-int OpcjeKontaktow::podajNumerOstatniegoKontaktu (vector <Osoba> daneAdresowe)
+int ContactOptions::giveLastContactNumber (vector <Person> addressData)
 {
-    OpcjeKontaktow import;
-    import.importujWszystkieKontakty(daneAdresowe);
-    if (daneAdresowe.empty())
+    ContactOptions import;
+    import.importAllContacts(addressData);
+    if (addressData.empty())
         return 0;
     else
     {
-        int numerOstatniegoKontaktu = daneAdresowe.size() - 1;
-        return atoi(daneAdresowe[numerOstatniegoKontaktu].numerID.c_str());
+        int lastContactNumber = addressData.size() - 1;
+        return atoi(addressData[lastContactNumber].IdNumber.c_str());
     }
 }
-void OpcjeUzytkownikow::importujDaneUzytkownikow(vector <Uzytkownik> &uzytkownicy)
+void UserOptions::importUserData(vector <User> &users)
 {
-    string liniaTekstuDoPobrania;
-    int nrLiniiDoPobrania = 1;
-    fstream bazaUzytkownikow;
-    bazaUzytkownikow.open("uzytkownicy.txt", ios::in | ios::app);
-    if (bazaUzytkownikow.good() == true)
+    string downloadedTextLine;
+    int downloadedTextLineNumber = 1;
+    fstream userDatabase;
+    userDatabase.open("uzytkownicy.txt", ios::in | ios::app);
+    if (userDatabase.good() == true)
     {
-        while (getline(bazaUzytkownikow, liniaTekstuDoPobrania))
+        while (getline(userDatabase, downloadedTextLine))
         {
-            string daneUzytkownika;
-            istringstream strumienLinii(liniaTekstuDoPobrania);
-            vector <string> pojedynczyUzytkownik;
+            string userData;
+            istringstream streamLine(downloadedTextLine);
+            vector <string> singleUser;
 
-            while(getline(strumienLinii, daneUzytkownika, '|'))
+            while(getline(streamLine, userData, '|'))
             {
-                istringstream strumienDanych(daneUzytkownika);
-                string pojedynczeDaneUzytkownika;
-                strumienDanych >> pojedynczeDaneUzytkownika;
-                pojedynczyUzytkownik.push_back(pojedynczeDaneUzytkownika);
+                istringstream streamData(userData);
+                string singleUserData;
+                streamData >> singleUserData;
+                singleUser.push_back(singleUserData);
             }
-           uzytkownicy.push_back(Uzytkownik(pojedynczyUzytkownik[0], pojedynczyUzytkownik[1],
-                                             pojedynczyUzytkownik[2]));
-            nrLiniiDoPobrania++;
+           users.push_back(User(singleUser[0], singleUser[1],
+                                             singleUser[2]));
+            downloadedTextLineNumber++;
         }
-        bazaUzytkownikow.close();
+        userDatabase.close();
     }
 }
 
-int OpcjeUzytkownikow::zalogujUzytkownika(vector <Uzytkownik> &uzytkownicy)
+int UserOptions::logInUser(vector <User> &users)
 {
     system("cls");
     cout<< ">>>LOGOWANIE<<<" <<endl;
     cout<< "---------------" <<endl;
     cout<< endl;
-    string nazwa, haslo;
+    string userName, userPassword;
     cout<< "Podaj login: ";
-    cin>> nazwa;
-    int i = 0;
-    while(i<uzytkownicy.size())
+    cin>> userName;
+    int vectorPosition = 0;
+    while(vectorPosition<users.size())
     {
-        if (uzytkownicy[i].nazwaUzytkownika == nazwa)
+        if (users[vectorPosition].userName == userName)
         {
-            for(int j = 0; j < 3; j++)
+            for(int attempt = 0; attempt < 3; attempt++)
             {
-                cout<< "Podaj haslo. Pozostalo prob " << 3 - j << ": ";
-                cin>> haslo;
+                cout<< "Podaj haslo. Pozostalo prob " << 3 - attempt << ": ";
+                cin>> userPassword;
                 cout<< endl;
-                if (uzytkownicy[i].hasloUzytkownika == haslo)
+                if (users[vectorPosition].userPassword == userPassword)
                 {
                     cout<< "Zalogowales sie!" <<endl;
                     Sleep(1000);
-                    return atoi(uzytkownicy[i].idUzytkownika.c_str());
+                    return atoi(users[vectorPosition].userId.c_str());
                 }
             }
             cout<< "Podaje 3 razy bledne haslo. Poczekaj 3 sekundy przed kolejna proba!" <<endl;
             Sleep(3000);
             return 0;
         }
-        i++;
+        vectorPosition++;
     }
     cout<< "Nie ma takiego uzytkownika!" <<endl;
     Sleep(1500);
     return 0;
 }
 
-void OpcjeUzytkownikow::zarejestrujUzytkownika(vector <Uzytkownik> uzytkownicy)
+void UserOptions::registerUser(vector <User> users)
 {
     system("cls");
     cout<< ">>>REJESTRACJA NOWEGO UZYTKOWNIKA<<<" <<endl;
     cout<< "------------------------------------" <<endl;
     cout<< endl;
-    vector <Uzytkownik> uzytkownicyDoEksportu;
-    string nazwa, haslo, numerID;
+    vector <User> usersForExport;
+    string userName, userPassword, userId;
     cout<< "Podaj nazwe uzytkownika: ";
-    cin>> nazwa;
-    int i = 0;
-    while(i < uzytkownicy.size())
+    cin>> userName;
+    int vectorPosition = 0;
+    while(vectorPosition < users.size())
     {
-        if (uzytkownicy[i].nazwaUzytkownika == nazwa)
+        if (users[vectorPosition].userName == userName)
         {
             cout<< "Taki uzytkownik istnieje. Podaj inna nazwe uzytkownika: ";
-            cin>> nazwa;
-            i = 0;
+            cin>> userName;
+            vectorPosition = 0;
         }
         else
         {
-            i++;
+            vectorPosition++;
         }
     }
     cout<< "Podaj haslo: ";
-    cin>> haslo;
-    numerID = konwersjaIntNaString(uzytkownicy.size() + 1);
-    uzytkownicyDoEksportu.push_back(Uzytkownik(numerID, nazwa, haslo));
-    fstream bazaUzytkownikow;
-    bazaUzytkownikow.open("uzytkownicy.txt",ios::out|ios::app);
-    if (bazaUzytkownikow.good() == true)
+    cin>> userPassword;
+    userId = intToStringConversion(users.size() + 1);
+    usersForExport.push_back(User(userId, userName, userPassword));
+    fstream userDatabase;
+    userDatabase.open("uzytkownicy.txt",ios::out|ios::app);
+    if (userDatabase.good() == true)
     {
-        for(int i = 0; i < uzytkownicyDoEksportu.size(); i++)
+        for(int vectorPosition = 0; vectorPosition < usersForExport.size(); vectorPosition++)
         {
-            bazaUzytkownikow<< uzytkownicyDoEksportu[i].idUzytkownika + "|"
-                            + uzytkownicyDoEksportu[i].nazwaUzytkownika + "|"
-                            + uzytkownicyDoEksportu[i].hasloUzytkownika + "|";
-            bazaUzytkownikow <<endl;
+            userDatabase<< usersForExport[vectorPosition].userId + "|"
+                            + usersForExport[vectorPosition].userName + "|"
+                            + usersForExport[vectorPosition].userPassword + "|";
+            userDatabase <<endl;
         }
 
-        bazaUzytkownikow.close();
-        uzytkownicyDoEksportu.clear();
+        userDatabase.close();
+        usersForExport.clear();
         cout<< endl;
         cout<< "Uzytkownik zostal dodany!" <<endl;
         Sleep(1500);
@@ -227,46 +227,46 @@ void OpcjeUzytkownikow::zarejestrujUzytkownika(vector <Uzytkownik> uzytkownicy)
 }
 
 
-void OpcjeKontaktow::importujKontaktyDlaZalogownegoUzytkownika(vector <Osoba> &daneAdresowe, int idZalogowanegoUzytkownika)
+void ContactOptions::importContactsForLoggedUsers(vector <Person> &addressData, int loggedUserId)
 {
-    vector <string> pojedynczyKontakt;
-    string daneOsobyOddzieloneKreskami = "";
-    fstream bazaKontaktow;
-    bazaKontaktow.open("kontakty.txt", ios::in);
-    if (bazaKontaktow.good() == true)
+    vector <string> singleContact;
+    string personalDataSeparatedByLine = "";
+    fstream contactDatabase;
+    contactDatabase.open("kontakty.txt", ios::in);
+    if (contactDatabase.good() == true)
     {
-        while (getline(bazaKontaktow, daneOsobyOddzieloneKreskami))
+        while (getline(contactDatabase, personalDataSeparatedByLine))
         {
-            pobierzDaneOsoby(pojedynczyKontakt, daneOsobyOddzieloneKreskami);
-            if (konwersjaIntNaString(idZalogowanegoUzytkownika) == pojedynczyKontakt[1])
+            getPersonalData(singleContact, personalDataSeparatedByLine);
+            if (intToStringConversion(loggedUserId) == singleContact[1])
             {
-                daneAdresowe.push_back(Osoba(pojedynczyKontakt[0], pojedynczyKontakt[1],
-                                             pojedynczyKontakt[2], pojedynczyKontakt[3],
-                                             pojedynczyKontakt[4], pojedynczyKontakt[5],
-                                             pojedynczyKontakt[6]));
+                addressData.push_back(Person(singleContact[0], singleContact[1],
+                                             singleContact[2], singleContact[3],
+                                             singleContact[4], singleContact[5],
+                                             singleContact[6]));
             }
-            pojedynczyKontakt.clear();
+            singleContact.clear();
         }
-        bazaKontaktow.close();
+        contactDatabase.close();
     }
 }
 
-void OpcjeKontaktow::wyswietlWszystkieKontakty(vector <Osoba> daneAdresowe)
+void ContactOptions::showAllContacts(vector <Person> addressData)
 {
     system("cls");
     cout<< ">>>LISTA WSZYSTKICH KONTAKTOW<<<" <<endl;
     cout<< "--------------------------------" <<endl;
     cout<< endl;
-    if (!daneAdresowe.empty())
+    if (!addressData.empty())
     {
-        for (int i = 0; i < daneAdresowe.size(); i++)
+        for (int vectorPosition = 0; vectorPosition < addressData.size(); vectorPosition++)
         {
-            cout<< daneAdresowe[i].numerID <<endl;
-            cout<< daneAdresowe[i].imie <<endl;
-            cout<< daneAdresowe[i].nazwisko <<endl;
-            cout<< daneAdresowe[i].telefon <<endl;
-            cout<< daneAdresowe[i].mail <<endl;
-            cout<< daneAdresowe[i].adres <<endl;
+            cout<< addressData[vectorPosition].IdNumber <<endl;
+            cout<< addressData[vectorPosition].name <<endl;
+            cout<< addressData[vectorPosition].lastName <<endl;
+            cout<< addressData[vectorPosition].phoneNumber <<endl;
+            cout<< addressData[vectorPosition].emailAddress <<endl;
+            cout<< addressData[vectorPosition].address <<endl;
         }
         system("pause");
     }
@@ -276,22 +276,22 @@ void OpcjeKontaktow::wyswietlWszystkieKontakty(vector <Osoba> daneAdresowe)
         Sleep(1500);
     }
 }
-void OpcjeKontaktow::eksportujKontaktDoPliku(vector <Osoba> &daneAdresoweDoEksportu)
+void ContactOptions::exportContactIntoFile(vector <Person> &addressDataForExport)
 {
-fstream bazaKontaktow;
-    bazaKontaktow.open("kontakty.txt",ios::out|ios::app);
-    if (bazaKontaktow.good() == true)
+fstream contactDatabase;
+    contactDatabase.open("kontakty.txt",ios::out|ios::app);
+    if (contactDatabase.good() == true)
     {
-        for(int i = 0; i < daneAdresoweDoEksportu.size(); i++)
+        for(int vectorPosition = 0; vectorPosition < addressDataForExport.size(); vectorPosition++)
         {
-            bazaKontaktow<< daneAdresoweDoEksportu[i].numerID + "|" + daneAdresoweDoEksportu[i].idUzytkownika
-                         + "|" + daneAdresoweDoEksportu[i].imie + "|" + daneAdresoweDoEksportu[i].nazwisko
-                         + "|" + daneAdresoweDoEksportu[i].telefon + "|" + daneAdresoweDoEksportu[i].mail
-                         + "|" + daneAdresoweDoEksportu[i].adres + "|";
-            bazaKontaktow <<endl;
+            contactDatabase<< addressDataForExport[vectorPosition].IdNumber + "|" + addressDataForExport[vectorPosition].userId
+                         + "|" + addressDataForExport[vectorPosition].name + "|" + addressDataForExport[vectorPosition].lastName
+                         + "|" + addressDataForExport[vectorPosition].phoneNumber + "|" + addressDataForExport[vectorPosition].emailAddress
+                         + "|" + addressDataForExport[vectorPosition].address + "|";
+            contactDatabase <<endl;
         }
 
-        bazaKontaktow.close();
+        contactDatabase.close();
         cout<< "Kontakt zostal dodany!"<<endl;
         Sleep(1500);
     }
@@ -302,156 +302,156 @@ fstream bazaKontaktow;
         Sleep(1500);
     }
 }
-void OpcjeKontaktow::dodajKontakt(vector <Osoba> &daneAdresowe, int idZalogowanegoUzytkownika)
+void ContactOptions::addContact(vector <Person> &addressData, int loggedUserId)
 {
     system("cls");
     cout<< ">>>DODAJ NOWY KONTAKT<<<" <<endl;
     cout<< "------------------------" <<endl;
     cout<< endl;
-    vector <Osoba> daneAdresoweDoEksportu;
-    string imie, nazwisko, telefon, mail, adres;
-    OpcjeKontaktow ostatniNumer;
-    int numerKontaktu = ostatniNumer.podajNumerOstatniegoKontaktu(daneAdresowe) + 1;
-    string numerID = konwersjaIntNaString(numerKontaktu);
-    string numerIdZalogowanegoUzytkownika = konwersjaIntNaString(idZalogowanegoUzytkownika);
+    vector <Person> addressDataForExport;
+    string name, lastName, phoneNumber, emailAddress, address;
+    ContactOptions lastNumber;
+    int contactNumber = lastNumber.giveLastContactNumber(addressData) + 1;
+    string IdNumber = intToStringConversion(contactNumber);
+    string loggedUserIdNumber = intToStringConversion(loggedUserId);
 
     cout<< "Podaj imie: ";
-    cin>> imie;
+    cin>> name;
 
     cout<< "Podaj nazwisko: ";
-    cin>> nazwisko;
+    cin>> lastName;
 
     cout<< "Podaj numer telefonu: ";
     cin.sync();
-    getline(cin, telefon);
+    getline(cin, phoneNumber);
 
     cout<< "Podaj adres e-mail: ";
-    cin>> mail;
+    cin>> emailAddress;
 
     cout<< "Podaj adres zamieszkania: ";
     cin.sync();
-    getline(cin, adres);
+    getline(cin, address);
 
-    daneAdresoweDoEksportu.push_back(Osoba(numerID, numerIdZalogowanegoUzytkownika, imie, nazwisko, telefon, mail, adres));
-    OpcjeKontaktow eksportKontaktu;
-    eksportKontaktu.eksportujKontaktDoPliku(daneAdresoweDoEksportu);
+    addressDataForExport.push_back(Person(IdNumber, loggedUserIdNumber, name, lastName, phoneNumber, emailAddress, address));
+    ContactOptions contactExport;
+    contactExport.exportContactIntoFile(addressDataForExport);
 }
 
-void OpcjeKontaktow::wyszukajKontaktPoImieniu(vector <Osoba> daneAdresowe)
+void ContactOptions::searchContactByName(vector <Person> addressData)
 {
     system("cls");
     cout<< ">>>WYSZUKAJ KONTAKT PO IMIENIU<<<" <<endl;
     cout<< "---------------------------------" <<endl;
     cout<< endl;
-    string imieDoSprawdzenia;
+    string nameToCheck;
     cout<< "Podaj imie: ";
-    cin>> imieDoSprawdzenia;
-    int licznikKontaktow = 0;
-    while(licznikKontaktow < daneAdresowe.size())
+    cin>> nameToCheck;
+    int vectorPosition = 0;
+    while(vectorPosition < addressData.size())
     {
-        if (daneAdresowe[licznikKontaktow].imie == imieDoSprawdzenia)
+        if (addressData[vectorPosition].name == nameToCheck)
         {
-            cout<< daneAdresowe[licznikKontaktow].numerID <<". "<< daneAdresowe[licznikKontaktow].imie <<" "<< daneAdresowe[licznikKontaktow].nazwisko <<endl;
+            cout<< addressData[vectorPosition].IdNumber <<". "<< addressData[vectorPosition].name <<" "<< addressData[vectorPosition].lastName <<endl;
             Sleep(1500);
-            licznikKontaktow++;
+            vectorPosition++;
         }
 
         else
-            licznikKontaktow++;
+            vectorPosition++;
     }
 
-    string wybranaOpcja;
+    string selectedOption;
     cout<< "Wybierz kontakt lub wybierz 0, aby przejsc do menu glownego: ";
-    cin>> wybranaOpcja;
+    cin>> selectedOption;
 
-    for(int i = 0; i < daneAdresowe.size(); i++)
+    for(int vectorPosition = 0; vectorPosition < addressData.size(); vectorPosition++)
     {
-        if (daneAdresowe[i].numerID == wybranaOpcja)
+        if (addressData[vectorPosition].IdNumber == selectedOption)
         {
-            cout<< daneAdresowe[i].imie <<" " <<daneAdresowe[i].nazwisko <<endl;
-            cout<< daneAdresowe[i].telefon <<endl;
-            cout<< daneAdresowe[i].mail <<endl;
-            cout<< daneAdresowe[i].adres <<endl;
+            cout<< addressData[vectorPosition].name <<" " <<addressData[vectorPosition].lastName <<endl;
+            cout<< addressData[vectorPosition].phoneNumber <<endl;
+            cout<< addressData[vectorPosition].emailAddress <<endl;
+            cout<< addressData[vectorPosition].address <<endl;
             system("pause");
         }
 
-        else if (wybranaOpcja == "0")
+        else if (selectedOption == "0")
             Sleep(500);
     }
 }
 
-void OpcjeKontaktow::wyszukajKontaktPoNazwisku(vector <Osoba> daneAdresowe)
+void ContactOptions::searchContactByLastName(vector <Person> addressData)
 {
     system("cls");
     cout <<">>>WYSZUKAJ KONTAKT PO NAZWISKU<<<" <<endl;
     cout <<"----------------------------------" <<endl;
     cout <<endl;
-    string nazwiskoDoSprawdzenia;
+    string lastNameToCheck;
     cout <<"Podaj nazwisko: ";
-    cin>> nazwiskoDoSprawdzenia;
-    int licznikKontaktow = 0;
-    while(licznikKontaktow < daneAdresowe.size())
+    cin>> lastNameToCheck;
+    int vectorPosition = 0;
+    while(vectorPosition < addressData.size())
     {
-        if (daneAdresowe[licznikKontaktow].nazwisko == nazwiskoDoSprawdzenia)
+        if (addressData[vectorPosition].lastName == lastNameToCheck)
         {
-            cout<< daneAdresowe[licznikKontaktow].numerID <<". "<< daneAdresowe[licznikKontaktow].imie <<" "<< daneAdresowe[licznikKontaktow].nazwisko <<endl;
+            cout<< addressData[vectorPosition].IdNumber <<". "<< addressData[vectorPosition].name <<" "<< addressData[vectorPosition].lastName <<endl;
             Sleep(1500);
-            licznikKontaktow++;
+            vectorPosition++;
         }
 
         else
-            licznikKontaktow++;
+            vectorPosition++;
     }
 
-    string wybranaOpcja;
+    string selectedOption;
     cout<< "Wybierz kontakt lub wybierz 0, aby przejsc do menu glownego: ";
-    cin>> wybranaOpcja;
+    cin>> selectedOption;
 
-    for(int i = 0; i < daneAdresowe.size(); i++)
+    for(int vectorPosition = 0; vectorPosition < addressData.size(); vectorPosition++)
     {
-        if (daneAdresowe[i].numerID == wybranaOpcja)
+        if (addressData[vectorPosition].IdNumber == selectedOption)
         {
-            cout<< daneAdresowe[i].imie <<" " <<daneAdresowe[i].nazwisko <<endl;
-            cout<< daneAdresowe[i].telefon <<endl;
-            cout<< daneAdresowe[i].mail <<endl;
-            cout<< daneAdresowe[i].adres <<endl;
+            cout<< addressData[vectorPosition].name <<" " <<addressData[vectorPosition].lastName <<endl;
+            cout<< addressData[vectorPosition].phoneNumber <<endl;
+            cout<< addressData[vectorPosition].emailAddress <<endl;
+            cout<< addressData[vectorPosition].address <<endl;
             system("pause");
         }
 
-        else if (wybranaOpcja == "0")
+        else if (selectedOption == "0")
             Sleep(500);
     }
 }
 
-void OpcjeUzytkownikow::zmianaHasla(vector <Uzytkownik> &uzytkownicy, int idZalogowanegoUzytkownika)
+void UserOptions::changePassword(vector <User> &users, int loggedUserId)
 {
     system("cls");
     cout<< ">>>ZMIANA HASLA<<<" <<endl;
     cout<< "------------------" <<endl;
     cout<< endl;
-    string noweHaslo;
+    string newUserPassword;
     cout<< "Podaj nowe haslo: ";
     cout<< endl;
-    cin>> noweHaslo;
-    for(int i = 0; i < uzytkownicy.size(); i++)
+    cin>> newUserPassword;
+    for(int vectorPosition = 0; vectorPosition < users.size(); vectorPosition++)
     {
-        if (uzytkownicy[i].idUzytkownika == konwersjaIntNaString(idZalogowanegoUzytkownika))
+        if (users[vectorPosition].userId == intToStringConversion(loggedUserId))
         {
-            uzytkownicy[i].hasloUzytkownika = noweHaslo;
+            users[vectorPosition].userPassword = newUserPassword;
         }
     }
-    fstream bazaUzytkownikow;
-    bazaUzytkownikow.open("uzytkownicy.txt",ios::out);
-    if (bazaUzytkownikow.good() == true)
+    fstream userDatabase;
+    userDatabase.open("uzytkownicy.txt",ios::out);
+    if (userDatabase.good() == true)
     {
-        for(int i = 0; i < uzytkownicy.size(); i++)
+        for(int vectorPosition = 0; vectorPosition < users.size(); vectorPosition++)
         {
-            bazaUzytkownikow<< uzytkownicy[i].idUzytkownika + "|"
-                            + uzytkownicy[i].nazwaUzytkownika + "|"
-                            + uzytkownicy[i].hasloUzytkownika + "|";
-            bazaUzytkownikow <<endl;
+            userDatabase<< users[vectorPosition].userId + "|"
+                            + users[vectorPosition].userName + "|"
+                            + users[vectorPosition].userPassword + "|";
+            userDatabase <<endl;
         }
-        bazaUzytkownikow.close();
+        userDatabase.close();
         cout<< "Haslo zostalo zmienione!" <<endl;
         Sleep(1500);
     }
@@ -462,51 +462,51 @@ void OpcjeUzytkownikow::zmianaHasla(vector <Uzytkownik> &uzytkownicy, int idZalo
     }
 }
 
-bool OpcjeKontaktow::sprawdzCzyKontaktIstnieje(vector <Osoba> daneAdresowe, int numerKontaktuDoEdycji)
+bool ContactOptions::checkContactExistion(vector <Person> addressData, int contacktNumberForEditing)
 {
-    vector <string> numeryID;
-    for(int i = 0; i < daneAdresowe.size(); i++)
+    vector <string> idNumbers;
+    for(int vectorPosition = 0; vectorPosition < addressData.size(); vectorPosition++)
     {
-        numeryID.push_back(daneAdresowe[i].numerID);
+        idNumbers.push_back(addressData[vectorPosition].IdNumber);
     }
 
     vector <string> ::iterator itr;
-    itr = find (numeryID.begin(), numeryID.end(), konwersjaIntNaString(numerKontaktuDoEdycji));
-    if (itr != numeryID.end()) return true;
+    itr = find (idNumbers.begin(), idNumbers.end(), intToStringConversion(contacktNumberForEditing));
+    if (itr != idNumbers.end()) return true;
     else return false;
 }
 
-int OpcjeKontaktow::podajPozycjeWWektorze(vector <Osoba> daneAdresowe, int numerKontaktuDoEdycji)
+int ContactOptions::givePositionInVector(vector <Person> addressData, int contacktNumberForEditing)
 {
-    vector <string> numeryID;
-    for(int i = 0; i < daneAdresowe.size(); i++)
+    vector <string> idNumbers;
+    for(int vectorPosition = 0; vectorPosition < addressData.size(); vectorPosition++)
     {
-        numeryID.push_back(daneAdresowe[i].numerID);
+        idNumbers.push_back(addressData[vectorPosition].IdNumber);
     }
 
-    for (int i = 0; i < numeryID.size(); i++)
+    for (int vectorPosition = 0; vectorPosition < idNumbers.size(); vectorPosition++)
     {
-        if (numeryID[i] == konwersjaIntNaString(numerKontaktuDoEdycji))
+        if (idNumbers[vectorPosition] == intToStringConversion(contacktNumberForEditing))
 
-            return i;
+            return vectorPosition;
     }
 }
 
-void OpcjeKontaktow::aktualizujDaneAdresowe(vector <Osoba> &daneAdresowe)
+void ContactOptions::updateAddressData(vector <Person> &addressData)
 {
-  fstream bazaKontaktow;
-        bazaKontaktow.open("kontakty.txt",ios::out);
-        if (bazaKontaktow.good() == true)
+  fstream contactDatabase;
+        contactDatabase.open("kontakty.txt",ios::out);
+        if (contactDatabase.good() == true)
         {
-            for(int i = 0; i < daneAdresowe.size(); i++)
+            for(int vectorPosition = 0; vectorPosition < addressData.size(); vectorPosition++)
             {
-                bazaKontaktow<< daneAdresowe[i].numerID + "|" + daneAdresowe[i].idUzytkownika + "|"
-                             + daneAdresowe[i].imie + "|" + daneAdresowe[i].nazwisko
-                             + "|" + daneAdresowe[i].telefon + "|" + daneAdresowe[i].mail
-                             + "|" + daneAdresowe[i].adres + "|";
-                bazaKontaktow <<endl;
+                contactDatabase<< addressData[vectorPosition].IdNumber + "|" + addressData[vectorPosition].userId + "|"
+                             + addressData[vectorPosition].name + "|" + addressData[vectorPosition].lastName
+                             + "|" + addressData[vectorPosition].phoneNumber + "|" + addressData[vectorPosition].emailAddress
+                             + "|" + addressData[vectorPosition].address + "|";
+                contactDatabase <<endl;
             }
-            bazaKontaktow.close();
+            contactDatabase.close();
             cout<< "Kontakt zostal zmieniony!" <<endl;
             Sleep(1500);
         }
@@ -517,32 +517,32 @@ void OpcjeKontaktow::aktualizujDaneAdresowe(vector <Osoba> &daneAdresowe)
         }
 }
 
-void OpcjeKontaktow::edytujKontakt(vector <Osoba> &daneAdresowe, int idZalogowanegoUzytkownika)
+void ContactOptions::editContact(vector <Person> &addressData, int loggedUserId)
 {
     system("cls");
     cout <<">>>EDYCJA WYBRANEGO KONTAKTU<<<" <<endl;
     cout <<"-------------------------------" <<endl;
     cout <<endl;
-    daneAdresowe.clear();
-    importujWszystkieKontakty(daneAdresowe);
-    string nowyTelefon, nowyMail, nowyAdres;
-    int opcja;
-    int numerKontaktuDoEdycji;
+    addressData.clear();
+    importAllContacts(addressData);
+    string newPhoneNumber, newEmailAddress, newAddress;
+    int selectedOption;
+    int contacktNumberForEditing;
     cout<< "Podaj numer kontaktu, ktory chcesz edytowac: ";
-    cin>> numerKontaktuDoEdycji;
-    OpcjeKontaktow pozycja;
-    int pozycjaWWektorze = pozycja.podajPozycjeWWektorze(daneAdresowe, numerKontaktuDoEdycji);
-    OpcjeKontaktow obecnosc;
-    if ((obecnosc.sprawdzCzyKontaktIstnieje(daneAdresowe, numerKontaktuDoEdycji) == 1) || (daneAdresowe[pozycjaWWektorze].idUzytkownika == konwersjaIntNaString(idZalogowanegoUzytkownika)))
+    cin>> contacktNumberForEditing;
+    ContactOptions position;
+    int positionInVector = position.givePositionInVector(addressData, contacktNumberForEditing);
+    ContactOptions presence;
+    if ((presence.checkContactExistion(addressData, contacktNumberForEditing) == 1) || (addressData[positionInVector].userId == intToStringConversion(loggedUserId)))
     {
-        for(int i = 0; i < daneAdresowe.size(); i++)
+        for(int vectorPosition = 0; vectorPosition < addressData.size(); vectorPosition++)
         {
-            if (daneAdresowe[i].numerID == konwersjaIntNaString(numerKontaktuDoEdycji))
+            if (addressData[vectorPosition].IdNumber == intToStringConversion(contacktNumberForEditing))
             {
-                cout<< daneAdresowe[i].imie << " " << daneAdresowe[i].nazwisko <<endl;
-                cout<< daneAdresowe[i].telefon <<endl;
-                cout<< daneAdresowe[i].mail <<endl;
-                cout<< daneAdresowe[i].adres <<endl;
+                cout<< addressData[vectorPosition].name << " " << addressData[vectorPosition].lastName <<endl;
+                cout<< addressData[vectorPosition].phoneNumber <<endl;
+                cout<< addressData[vectorPosition].emailAddress <<endl;
+                cout<< addressData[vectorPosition].address <<endl;
             }
 
         }
@@ -552,23 +552,23 @@ void OpcjeKontaktow::edytujKontakt(vector <Osoba> &daneAdresowe, int idZalogowan
         cout<< "2. Adres mailowy" <<endl;
         cout<< "3. Adres zamieszkania" <<endl;
         cout<< "4. Wyjscie" <<endl;
-        cin>> opcja;
-        switch(opcja)
+        cin>> selectedOption;
+        switch(selectedOption)
         {
         case 1:
         {
             cout<< "Podaj nowy numer telefonu: ";
             cin.sync();
-            getline(cin, nowyTelefon);
-            daneAdresowe[pozycjaWWektorze].telefon = nowyTelefon;
+            getline(cin, newPhoneNumber);
+            addressData[positionInVector].phoneNumber = newPhoneNumber;
         }
         break;
 
         case 2:
         {
             cout<< "Podaj nowy adres mailowy: ";
-            cin>> nowyMail;
-            daneAdresowe[pozycjaWWektorze].mail = nowyMail;
+            cin>> newEmailAddress;
+            addressData[positionInVector].emailAddress = newEmailAddress;
         }
         break;
 
@@ -576,8 +576,8 @@ void OpcjeKontaktow::edytujKontakt(vector <Osoba> &daneAdresowe, int idZalogowan
         {
             cout<< "Podaj nowy adres zamieszkania: ";
             cin.sync();
-            getline(cin, nowyAdres);
-            daneAdresowe[pozycjaWWektorze].adres = nowyAdres;
+            getline(cin, newAddress);
+            addressData[positionInVector].address = newAddress;
         }
         break;
 
@@ -586,8 +586,8 @@ void OpcjeKontaktow::edytujKontakt(vector <Osoba> &daneAdresowe, int idZalogowan
             break;
         }
 
-      OpcjeKontaktow aktualizacja;
-      aktualizacja.aktualizujDaneAdresowe(daneAdresowe);
+      ContactOptions update;
+      update.updateAddressData(addressData);
     }
     else
     {
@@ -595,29 +595,29 @@ void OpcjeKontaktow::edytujKontakt(vector <Osoba> &daneAdresowe, int idZalogowan
         Sleep(1500);
     }
 }
-void OpcjeKontaktow::usunKontakt(vector <Osoba> daneAdresowe, int idZalogowanegoUzytkownika)
+void ContactOptions::removeContact(vector <Person> addressData, int loggedUserId)
 {
     system("cls");
     cout<< ">>>USUWANIE WYBRANEGO KONTAKTU<<<" <<endl;
     cout<< "---------------------------------" <<endl;
     cout<< endl;
-    daneAdresowe.clear();
-    importujWszystkieKontakty(daneAdresowe);
-    int numerKontaktu;
+    addressData.clear();
+    importAllContacts(addressData);
+    int contactNumber;
     cout<< "Podaj numer kontaktu, ktory chcesz usunac: ";
-    cin>> numerKontaktu;
-    OpcjeKontaktow obecnosc;
-    if ((obecnosc.sprawdzCzyKontaktIstnieje(daneAdresowe, numerKontaktu)) == 1 && (daneAdresowe[numerKontaktu-1].idUzytkownika == konwersjaIntNaString(idZalogowanegoUzytkownika)))
+    cin>> contactNumber;
+    ContactOptions presence;
+    if ((presence.checkContactExistion(addressData, contactNumber)) == 1 && (addressData[contactNumber-1].userId == intToStringConversion(loggedUserId)))
     {
-        vector <string > tymczas;
+        vector <string > temporary;
         ifstream in("kontakty.txt");
-        string liniaDoUsuniecia;
-        while( getline( in, liniaDoUsuniecia ) ) tymczas.push_back( liniaDoUsuniecia );
+        string removedLine;
+        while(getline(in, removedLine)) temporary.push_back(removedLine);
         in.close();
         ofstream out("kontakty.txt");
-        for( int i = 0; i < tymczas.size(); i++ )
+        for( int vectorPosition = 0; vectorPosition < temporary.size(); vectorPosition++)
         {
-            if( i + 1 != numerKontaktu) out << tymczas[i] <<endl;
+            if(vectorPosition + 1 != contactNumber) out << temporary[vectorPosition] <<endl;
         }
         out.close();
         cout<< "Kontakt zostal usuniety!" <<endl;

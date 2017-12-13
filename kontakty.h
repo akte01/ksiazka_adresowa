@@ -7,46 +7,46 @@
 
 using namespace std;
 
-class Uzytkownik
+class User
 {
 public:
-    string idUzytkownika, nazwaUzytkownika, hasloUzytkownika;
-    Uzytkownik(string idUzytkownika, string nazwaUzytkownika, string hasloUzytkownika);
+    string userId, userName, userPassword;
+    User(string userId, string userName, string userPassword);
 };
 
-class OpcjeUzytkownikow
+class UserOptions
 {
 public:
-    vector <Uzytkownik> uzytkownicy;
-    void importujDaneUzytkownikow(vector <Uzytkownik> &uzytkownicy);
-    void zarejestrujUzytkownika(vector <Uzytkownik> uzytkownicy);
-    int zalogujUzytkownika(vector <Uzytkownik> &uzytkownicy);
-    void zmianaHasla(vector <Uzytkownik> &uzytkownicy, int idZalogowanegoUzytkownika);
+    vector <User> users;
+    void importUserData(vector <User> &users);
+    void registerUser(vector <User> users);
+    int logInUser(vector <User> &users);
+    void changePassword(vector <User> &users, int loggedUserId);
 };
 
-class Osoba
+class Person
 {
 public:
-    string numerID, idUzytkownika, imie, nazwisko, telefon, mail, adres;
-    Osoba(string numerID, string idUzytkownika, string imie, string nazwisko, string telefon, string mail, string adres);
+    string IdNumber, userId, name, lastName, phoneNumber, emailAddress, address;
+    Person(string IdNumber, string userId, string name, string lastName, string phoneNumber, string emailAddress, string address);
 };
 
-class OpcjeKontaktow
+class ContactOptions
 {
     public:
-    vector <Osoba> daneAdresowe;
-    void importujKontaktyDlaZalogownegoUzytkownika(vector <Osoba> &daneAdresowe, int idZalogowanegoUzytkownika);
-    void importujWszystkieKontakty(vector <Osoba> &daneAdresowe);
-    void dodajKontakt(vector <Osoba> &daneAdresowe, int idZalogowanegoUzytkownika);
-    void wyszukajKontaktPoImieniu(vector <Osoba> daneAdresowe);
-    void wyszukajKontaktPoNazwisku(vector <Osoba> daneAdresowe);
-    void wyswietlWszystkieKontakty(vector <Osoba> daneAdresowe);
-    void edytujKontakt(vector <Osoba> &daneAdresowe, int idZalogowanegoUzytkownika);
-    void usunKontakt(vector <Osoba> daneAdresowe, int idZalogowanegoUzytkownika);
-    void pobierzDaneOsoby(vector <string> &pojedynczyKontakt, string daneOsobyOddzieloneKreskami);
-    int podajNumerOstatniegoKontaktu (vector <Osoba> daneAdresowe);
-    bool sprawdzCzyKontaktIstnieje(vector <Osoba> daneAdresowe, int numerKontaktuDoEdycji);
-    int podajPozycjeWWektorze(vector <Osoba> daneAdresowe, int numerKontaktuDoEdycji);
-    void eksportujKontaktDoPliku(vector <Osoba> &daneAdresoweDoEksportu);
-    void aktualizujDaneAdresowe(vector <Osoba> &daneAdresowe);
+    vector <Person> addressData;
+    void importContactsForLoggedUsers(vector <Person> &addressData, int loggedUserId);
+    void importAllContacts(vector <Person> &addressData);
+    void addContact(vector <Person> &addressData, int loggedUserId);
+    void searchContactByName(vector <Person> addressData);
+    void searchContactByLastName(vector <Person> addressData);
+    void showAllContacts(vector <Person> addressData);
+    void editContact(vector <Person> &addressData, int loggedUserId);
+    void removeContact(vector <Person> addressData, int loggedUserId);
+    void getPersonalData(vector <string> &singleContact, string personalDataSeparatedByLine);
+    int giveLastContactNumber (vector <Person> addressData);
+    bool checkContactExistion(vector <Person> addressData, int contacktNumberForEditing);
+    int givePositionInVector(vector <Person> addressData, int contacktNumberForEditing);
+    void exportContactIntoFile(vector <Person> &addressDataForExport);
+    void updateAddressData(vector <Person> &addressData);
 };
